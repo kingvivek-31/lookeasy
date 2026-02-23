@@ -1,5 +1,5 @@
 // ============================================
-// StarterStudio — Premium Agency Scripts
+// LookEasy — Premium Agency Scripts
 // ============================================
 
 // Initialize AOS
@@ -100,14 +100,16 @@ window.addEventListener('scroll', () => {
 // Tilt effect on portfolio cards
 document.querySelectorAll('.portfolio-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = (y - centerY) / 20;
-        const rotateY = (centerX - x) / 20;
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        if (window.innerWidth > 768) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = (y - centerY) / 25;
+            const rotateY = (centerX - x) / 25;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+        }
     });
     card.addEventListener('mouseleave', () => {
         card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
@@ -117,10 +119,12 @@ document.querySelectorAll('.portfolio-card').forEach(card => {
 // Magnetic effect on CTA buttons
 document.querySelectorAll('.btn-glow').forEach(btn => {
     btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) translateY(-3px)`;
+        if (window.innerWidth > 768) {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) translateY(-3px)`;
+        }
     });
     btn.addEventListener('mouseleave', () => {
         btn.style.transform = 'translate(0, 0)';
@@ -143,6 +147,44 @@ window.addEventListener('scroll', () => {
         if (link.getAttribute('href') === '#' + current) {
             link.classList.add('text-agency-white');
             link.classList.remove('text-agency-silver');
+        }
+    });
+});
+// Enhanced ripple effect on buttons
+document.querySelectorAll('.btn-glow, .btn-ghost').forEach(button => {
+    button.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.style.position = 'absolute';
+        ripple.style.left = (e.clientX - rect.left) + 'px';
+        ripple.style.top = (e.clientY - rect.top) + 'px';
+        ripple.style.width = '0';
+        ripple.style.height = '0';
+        ripple.style.borderRadius = '50%';
+        ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+        ripple.style.pointerEvents = 'none';
+        ripple.style.animation = 'ripple-animation 0.6s ease-out';
+        
+        if (!this.style.position || this.style.position === 'static') {
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+        }
+        
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href !== '#' && document.querySelector(href)) {
+            e.preventDefault();
+            document.querySelector(href).scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
         }
     });
 });
